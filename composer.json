@@ -1,0 +1,17 @@
+{
+    "name": "aperture/aperture",
+    "description": "api",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Aperture\\": "src/",
+            "routes\\": "test_routes/"
+        }
+    },
+    "require": {
+        "marksync/provider": "^1.1"
+    },
+    "scripts": {
+        "mark": "./vendor/bin/mark"
+    }
+}
