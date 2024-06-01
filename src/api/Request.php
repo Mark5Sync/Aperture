@@ -24,6 +24,7 @@ class Request
     {
         $this->setPrefix();
         $this->setParams();
+        $this->checkSystem();
     }
 
 
@@ -32,14 +33,13 @@ class Request
         $request_uri = $_SERVER['REQUEST_URI'];
         $pattern = "/{$this->parent->prefix}\/([\w_,\/]+)?\??/";
 
-        $param_value = 'Index';
+        $this->task = 'Index';
 
         if (preg_match($pattern, $request_uri, $matches)) {
             if (isset($matches[1]))
-                $param_value = $matches[1];
+            $this->task = $matches[1];
         }
 
-        $this->task = $param_value;
         $post = file_get_contents('php://input');
         if ($post)
             $this->post = json_decode($post, true);
@@ -148,5 +148,19 @@ class Request
             'file' => $exception->getFile() . ':' . $exception->getLine(),
             'task' => $method,
         ];
+    }
+
+
+    private function checkSystem(){
+        switch ($this->task) {
+            case '_':
+                exit('merge');
+                break;
+            
+            case '__doc__':
+                exit('doc');
+
+                break;
+        }
     }
 }
