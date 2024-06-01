@@ -18,13 +18,13 @@ class Signature
             http_response_code(400);
 
             return [
-                'message' => "task {$this->request->task} not found",
+                'message' => "{$this->request->task} not found",
                 'code' => 400,
             ];
         }
 
         try {
-            $result['data'] = $task();
+            $result['data'] = $task(...$this->request->params);
         } catch (\Throwable $th) {
             $result['error'] = [
                 'message' => $th->getMessage(),

@@ -7,8 +7,23 @@ use Aperture\Route;
 class SayHello extends Route
 {
 
-    function __invoke()
+    function test()
     {
-        return 'Hello';
+        yield $this('Gordon');
+        yield $this(null);
     }
+
+
+
+    function __invoke(?string $name = null)
+    {
+        if (!$name)
+            return 'Whats is your name';
+
+        return [
+            "first_name" => $name,
+            "second_name" => 'Freeman',
+        ];
+    }
+
 }

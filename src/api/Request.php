@@ -23,6 +23,7 @@ class Request
     function __construct(private Aperture $parent)
     {
         $this->setPrefix();
+        $this->setParams();
     }
 
 
@@ -46,6 +47,16 @@ class Request
             $this->post = $_POST;
 
         $this->get = $_GET;
+    }
+
+
+    private function setParams()
+    {
+        if (!empty($this->post))
+            return $this->params = $this->post;
+
+        if (!empty($this->get))
+            return $this->params = $this->get;
     }
 
 
