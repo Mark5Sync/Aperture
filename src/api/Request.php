@@ -37,7 +37,7 @@ class Request
 
         if (preg_match($pattern, $request_uri, $matches)) {
             if (isset($matches[1]))
-            $this->task = $matches[1];
+            $this->task = str_replace('/', '\\', $matches[1]);
         }
 
         $post = file_get_contents('php://input');

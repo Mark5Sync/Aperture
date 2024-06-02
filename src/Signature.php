@@ -15,11 +15,11 @@ class Signature
         try {
             $task = new $class;
         } catch (\Throwable $th) {
-            http_response_code(400);
+            http_response_code(404);
 
             return [
                 'message' => "{$this->request->task} not found",
-                'code' => 400,
+                'code' => 404,
             ];
         }
 
