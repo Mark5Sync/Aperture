@@ -2,6 +2,19 @@
 
 namespace Aperture;
 
-class Route {
+class Route
+{
 
+    function beforeTest()
+    {
+    }
+
+    function test()
+    {
+    }
+
+
+    function afterTest()
+    {
+    }
 }

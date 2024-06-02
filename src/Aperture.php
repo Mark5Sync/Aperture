@@ -5,8 +5,8 @@ namespace Aperture;
 abstract class Aperture extends Signature
 {
 
-    protected string $routes;
-    protected string $namespace;
+    public string $routes;
+    public string $namespace;
     public string $prefix = '';
 
     final function __construct()

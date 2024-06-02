@@ -9,7 +9,8 @@
         }
     },
     "require": {
-        "marksync/provider": "^1.1"
+        "marksync/provider": "^1.1",
+        "composer/class-map-generator": "^1.1"
     },
     "scripts": {
         "mark": "./vendor/bin/mark"

@@ -8,7 +8,7 @@ new class extends Aperture
 {
 
     public string $prefix = 'api';
-    protected string $routes = './test_routes';
-    protected string $namespace = 'routes'; 
+    public string $routes = './test_routes';
+    public string $namespace = 'routes'; 
 
 };

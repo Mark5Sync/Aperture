@@ -10,6 +10,8 @@ class SayHello extends Route
     function test()
     {
         yield $this('Gordon');
+        yield $this('Max');
+        yield $this('Семен');
         yield $this(null);
     }
 

@@ -3,6 +3,7 @@
 namespace Aperture\api;
 
 use Aperture\Aperture;
+use Aperture\doc\Doc;
 use marksync\provider\Mark;
 use ReflectionMethod;
 
@@ -37,7 +38,7 @@ class Request
 
         if (preg_match($pattern, $request_uri, $matches)) {
             if (isset($matches[1]))
-            $this->task = str_replace('/', '\\', $matches[1]);
+                $this->task = str_replace('/', '\\', $matches[1]);
         }
 
         $post = file_get_contents('php://input');
@@ -151,16 +152,17 @@ class Request
     }
 
 
-    private function checkSystem(){
+    private function checkSystem()
+    {
         switch ($this->task) {
             case '_':
                 exit('merge');
                 break;
-            
-            case '__doc__':
-                exit('doc');
 
-                break;
+            case '__doc__':
+                $docs = new Doc($this->parent->routes);
+                $docs->build();
+                exit(json_encode($docs->getScheme()));
         }
     }
 }
