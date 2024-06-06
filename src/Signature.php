@@ -10,7 +10,7 @@ class Signature
 
     function runTask()
     {
-        $class = "{$this->namespace}\\{$this->request->task}";
+        $class = stripslashes($this->namespace . "\\" . $this->request->task);
 
         try {
             $task = new $class;
