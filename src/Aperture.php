@@ -5,9 +5,7 @@ namespace Aperture;
 abstract class Aperture extends Signature
 {
 
-    public string $routes;
-    public string $namespace;
-    public string $prefix = '';
+
 
     final function __construct()
     {
@@ -20,5 +18,12 @@ abstract class Aperture extends Signature
             $strResult = json_encode(['error' => $this->getJsonError()]);
 
         exit($strResult);
+    }
+
+
+
+    public function verificateToken(string $token): bool
+    {
+        return false;
     }
 }

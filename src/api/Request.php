@@ -2,6 +2,7 @@
 
 namespace Aperture\api;
 
+use Aperture\_markers\cli;
 use Aperture\Aperture;
 use Aperture\doc\Doc;
 use marksync\provider\Mark;
@@ -10,6 +11,8 @@ use ReflectionMethod;
 #[Mark(args: ['parent'])]
 class Request
 {
+    use cli;
+
     public string $task;
     public array $params = [];
     public array $post = [];
@@ -159,10 +162,29 @@ class Request
                 exit('merge');
                 break;
 
+
             case '__doc__':
+                $this->checkToken();
+
                 $docs = new Doc($this->parent->routes);
                 $docs->build();
                 exit(json_encode($docs->getScheme()));
+
+
+            case '__ApertureTask__':
+                $this->checkToken();
+                ['task' => $task, 'data' => $data] = $this->params;
+
+                exit(json_encode($this->createTask($task, $data)));
+        }
+    }
+
+
+    private function checkToken()
+    {
+        if (!$this->parent->verificateToken($this->params['token'])) {
+            http_response_code(401);
+            throw new \Exception("Invalid token", 401);
         }
     }
 }

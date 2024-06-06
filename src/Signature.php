@@ -4,9 +4,10 @@ namespace Aperture;
 
 use Aperture\_markers\api;
 
-class Signature
+abstract class Signature extends ApertureConfig
 {
     use api;
+
 
     function runTask()
     {

@@ -10,9 +10,11 @@
     },
     "require": {
         "marksync/provider": "^1.1",
-        "composer/class-map-generator": "^1.1"
+        "composer/class-map-generator": "^1.1",
+        "twcli/twcli": "^1.0"
     },
     "scripts": {
-        "mark": "./vendor/bin/mark"
+        "mark": "./vendor/bin/mark",
+        "route:create": "Aperture\\run::createRoute"
     }
 }
