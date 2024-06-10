@@ -41,7 +41,7 @@ class Request
 
         if (preg_match($pattern, $request_uri, $matches)) {
             if (isset($matches[1]))
-                $this->task = str_replace('/', '\\', $matches[1]);
+                $this->task = str_replace('/', '\\\\', $matches[1]);
         }
 
         $post = file_get_contents('php://input');
@@ -166,7 +166,7 @@ class Request
             case '__doc__':
                 $this->checkToken();
 
-                $docs = new Doc($this->parent->routes);
+                $docs = new Doc($this->parent->routes, $this->parent->namespace);
                 $docs->build();
                 exit(json_encode($docs->getScheme()));
 
@@ -175,7 +175,18 @@ class Request
                 $this->checkToken();
                 ['task' => $task, 'data' => $data] = $this->params;
 
-                exit(json_encode($this->createTask($task, $data)));
+                try {
+                    $result = $this->createTask($this->parent, $task, $data);
+                } catch (\Throwable $th) {
+                    $result = [
+                        'error' => [
+                            'message' => $th->getMessage(),
+                            'code' => $th->getCode(),
+                        ],
+                    ];
+                }
+
+                exit(json_encode($result));
         }
     }
 

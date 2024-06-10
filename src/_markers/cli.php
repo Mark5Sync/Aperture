@@ -2,6 +2,7 @@
 
 namespace Aperture\_markers;
 
+use Aperture\ApertureConfig;
 use marksync\provider\provider;
 use Aperture\cli\Route;
 use Aperture\cli\Task;
@@ -18,8 +19,8 @@ trait cli
     {
         return new Route;
     }
-    function createTask(string $task, array $data = array()): Task
+    function createTask(ApertureConfig $config, string $task, array $data = array()): Task
     {
-        return new Task($task, $data);
+        return new Task($config, $task, $data);
     }
 }

@@ -27,10 +27,7 @@ abstract class Signature extends ApertureConfig
         try {
             $result['data'] = $task(...$this->request->params);
         } catch (\Throwable $th) {
-            $result['error'] = [
-                'message' => $th->getMessage(),
-                'code' => $th->getCode(),
-            ];
+            $result['error'] = new Error($th->getMessage(), $th->getCode());
             $this->onError($th);
             http_response_code(400);
         }

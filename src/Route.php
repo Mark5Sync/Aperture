@@ -9,10 +9,10 @@ class Route
     {
     }
 
-    function test()
+    function test(callable $invoke)
     {
+        return $invoke();
     }
-
 
     function afterTest()
     {
