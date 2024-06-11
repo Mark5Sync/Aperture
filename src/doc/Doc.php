@@ -81,6 +81,9 @@ class Doc
             $inputs[$propertie->name] = $this->getParametrType($propertie, "{$alias}{$ucfirst}Input");
         }
 
+        if (empty($inputs))
+            return null;
+
         return $inputs;
     }
 
