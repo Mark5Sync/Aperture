@@ -51,7 +51,7 @@ class Doc
 
                 foreach ($task->test($test) as $_);
 
-                $inputs = $this->getTaskInputs($task);
+                $inputs = $this->getTaskInputs($task, $alias);
             } catch (\Throwable $th) {
                 $exceptions[] = new Error($th->getMessage(), $th->getCode());
             }
@@ -62,7 +62,7 @@ class Doc
                 'alias' => $alias,
                 'section' => $section,
                 'breadcrumbs' => $breadcrumbs,
-                'inputType' => $inputs,
+                'inputType'   => $inputs,
                 'outputType'  => count($result) < 2 ? $result[0] : new Join("{$alias}Output", $result),
                 'exceptions' => $exceptions,
             ];
@@ -70,21 +70,68 @@ class Doc
     }
 
 
-    private function getTaskInputs($task)
+    private function getTaskInputs($task, string $alias)
     {
         $reflectionMethod = new ReflectionMethod($task, '__invoke');
 
         $inputs = [];
 
         foreach ($reflectionMethod->getParameters() as $propertie) {
-            $inputs[] = [
-                'name'  => $propertie->getName(),
-                // 'type' => $propertie->getType(),
-            ];
+            $ucfirst = ucfirst($propertie->name);
+            $inputs[$propertie->name] = $this->getParametrType($propertie, "{$alias}{$ucfirst}Input");
         }
 
         return $inputs;
     }
+
+
+
+    private function getParametrType(\ReflectionParameter $propertie, string $alias)
+    {
+        $type = $propertie->getType();
+
+        if (!$type)
+            $type = 'null';
+        else if ($type instanceof \ReflectionNamedType)
+            $type = $this->getInputType($alias, $type->getName(), $propertie->allowsNull());
+        else if ($type instanceof \ReflectionUnionType)
+            $type = array_map(fn ($tp) => "$tp", $type->getTypes());
+
+
+        return $type;
+    }
+
+
+    private function getInputType($alias, $name, $canToBeNull)
+    {
+        $result = null;
+        switch ($name) {
+            case 'int':
+            case 'float':
+                $result = 1;
+
+                break;
+            case 'string':
+                $result = 'string';
+                break;
+            case 'array':
+                $result = [];
+                break;
+
+            case 'bool':
+                $result = true;
+                break;
+
+            default:
+                $result = 'avy';
+        }
+
+        if ($canToBeNull)
+            return new Join($alias, [null, $result]);
+
+        return $result;
+    }
+
 
 
     private function getQueryFromNamespace(string $namespace)
@@ -99,6 +146,9 @@ class Doc
 
     function getScheme(): array
     {
-        return $this->schema;
+        return [
+            'schema' => $this->schema,
+            'version' => 2,
+        ];
     }
 }

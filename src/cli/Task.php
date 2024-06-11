@@ -76,6 +76,8 @@ class Task implements JsonSerializable
 
 
 
+
+
     function jsonSerialize(): mixed
     {
         return $this->result;
