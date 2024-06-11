@@ -51,13 +51,16 @@ class Task implements JsonSerializable
          * $description
          * created at $createdAt
          **/
-        class $name extends Route {
+        class $name extends Route 
+        {
 
-            function test(\$invoke){
+            function test(\$invoke)
+            {
                 yield \$invoke('Xarmerong');
             }
 
-            function __invoke(string \$name){
+            function __invoke(string \$name)
+            {
                 throw new \Exception("[DefaultRoute]", 12);
                 return "Hello, \$name";
             }
