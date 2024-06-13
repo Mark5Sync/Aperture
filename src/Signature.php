@@ -25,7 +25,8 @@ abstract class Signature extends ApertureConfig
         }
 
         try {
-            $result['data'] = $task(...$this->request->params);
+            $params = $this->request->params;
+            $result['data'] = $task(...$params);
         } catch (\Throwable $th) {
             $result['error'] = new Error($th->getMessage(), $th->getCode());
             $this->onError($th);

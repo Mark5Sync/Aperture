@@ -5,6 +5,7 @@ namespace Aperture\doc;
 use Aperture\Error;
 use Aperture\Route;
 use Composer\ClassMapGenerator\ClassMapGenerator;
+use marksync\provider\NamespaceController;
 use ReflectionMethod;
 
 class Doc
@@ -20,6 +21,8 @@ class Doc
     function build()
     {
         $map = ClassMapGenerator::createMap($this->routes);
+
+        (new NamespaceController($this->routes, trim($this->namespace, '\\')))->handle($map);
 
         foreach ($map as $route => $path) {
             try {
