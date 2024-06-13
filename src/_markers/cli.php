@@ -12,7 +12,7 @@ trait cli {
     use provider;
 
    function createRoute(): Route { return new Route; }
-   function createTask(Aperture\ApertureConfig $config, string $task, $data = array (
+   function createTask(\Aperture\ApertureConfig $config, string $task, array $data = array (
 )): Task { return new Task($config, $task, $data); }
 
 }

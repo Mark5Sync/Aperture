@@ -214,16 +214,16 @@
         },
         {
             "name": "marksync/provider",
-            "version": "v1.1.4",
+            "version": "v1.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Mark5Sync/provider.git",
-                "reference": "d2415769c9d119332df13c7ae50d29367f6576f5"
+                "reference": "323bee8f223e8eeabe031662239fd0ae95ae7eee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Mark5Sync/provider/zipball/d2415769c9d119332df13c7ae50d29367f6576f5",
-                "reference": "d2415769c9d119332df13c7ae50d29367f6576f5",
+                "url": "https://api.github.com/repos/Mark5Sync/provider/zipball/323bee8f223e8eeabe031662239fd0ae95ae7eee",
+                "reference": "323bee8f223e8eeabe031662239fd0ae95ae7eee",
                 "shasum": ""
             },
             "require": {
@@ -252,9 +252,9 @@
             "description": "provider",
             "support": {
                 "issues": "https://github.com/Mark5Sync/provider/issues",
-                "source": "https://github.com/Mark5Sync/provider/tree/v1.1.4"
+                "source": "https://github.com/Mark5Sync/provider/tree/v1.1.7"
             },
-            "time": "2024-06-13T07:23:39+00:00"
+            "time": "2024-06-13T09:57:49+00:00"
         },
         {
             "name": "phpoption/phpoption",

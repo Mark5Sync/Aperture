@@ -12,7 +12,7 @@ class Task implements JsonSerializable
     private mixed $result;
 
 
-    function __construct(private ApertureConfig $config, string $task, $data = [])
+    function __construct(private ApertureConfig $config, string $task, array $data = [])
     {
         $this->result = $this->{$task}(...$data);
     }
