@@ -8,7 +8,7 @@ use Aperture\doc\Doc;
 use marksync\provider\Mark;
 use ReflectionMethod;
 
-#[Mark(args: ['parent'])]
+#[Mark(args: ['parent', 'super'])]
 class Request
 {
     use cli;
@@ -24,8 +24,10 @@ class Request
     public array $exceptions = [];
 
 
-    function __construct(private Aperture $parent)
+    function __construct(private Aperture $parent, $super)
     {
+        $super($this);
+
         $this->setPrefix();
         $this->setParams();
         $this->checkSystem();
@@ -166,6 +168,8 @@ class Request
             case '__doc__':
                 $this->checkToken();
 
+                $this->isDebug = true;
+
                 $docs = new Doc($this->parent->routes, $this->parent->namespace);
                 $docs->build();
                 exit(json_encode($docs->getScheme()));
@@ -193,7 +197,8 @@ class Request
 
     private function checkToken()
     {
-        if (!$this->parent->verificateToken($this->params['token'])) {
+        ['token' => $token] = ['token' => null, ...$this->params];
+        if (!$this->parent->verificateToken($token)) {
             http_response_code(401);
             throw new \Exception("Invalid token", 401);
         }

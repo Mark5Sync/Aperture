@@ -2,8 +2,11 @@
 
 namespace Aperture;
 
+use Aperture\_markers\api;
+
 class Route
 {
+    use api;
 
     function beforeTest()
     {

@@ -7,12 +7,12 @@ use Aperture\Route;
 class SayHello extends Route
 {
 
-    function test()
+    function test(callable $invoke)
     {
-        yield $this('Gordon');
-        yield $this('Max');
-        yield $this('Семен');
-        yield $this(null);
+        yield $invoke('Gordon');
+        yield $invoke('Max');
+        yield $invoke('Семен');
+        yield $invoke(null);
     }
 
 

@@ -34,20 +34,24 @@ class Doc
             [$url, $alias, $section, $breadcrumbs] = $this->getQueryFromNamespace($route);
             $result = [];
             $exceptions = [];
+            $times = [];
+
 
 
 
             try {
                 $task = new $route;
 
-                $test = function (...$props) use ($task, &$exceptions, &$result) {
+
+                $test = function (...$props) use ($task, &$exceptions, &$result, &$times) {
                     try {
+                        $start = microtime(true);
                         $result = [...$result, $task(...$props)];
+                        $times[] = microtime(true) - $start;
                     } catch (\Throwable $th) {
                         $exceptions[] = new Error($th->getMessage(), $th->getCode());
                     }
                 };
-
 
                 foreach ($task->test($test) as $_);
 
@@ -56,6 +60,7 @@ class Doc
                 $exceptions[] = new Error($th->getMessage(), $th->getCode());
             }
 
+            $time = empty($times) ? 0 : array_sum($times) / count($times);
 
             $this->schema[] = [
                 'url' => $url,
@@ -63,8 +68,9 @@ class Doc
                 'section' => $section,
                 'breadcrumbs' => $breadcrumbs,
                 'inputType'   => $inputs,
-                'outputType'  => count($result) < 2 ? $result[0] : new Join("{$alias}Output", $result),
+                'outputType'  => count($result) ? (count($result) < 2 ? $result[0] : new Join("{$alias}Output", $result)) : null,
                 'exceptions' => $exceptions,
+                'time' => $time,
             ];
         }
     }
@@ -141,6 +147,9 @@ class Doc
     {
         $url = substr($namespace, strlen($this->namespace));
         $breadcrumbs = explode('\\', $url);
+
+        $url = str_replace('\\', '/', $url);
+
         $alias = implode('', $breadcrumbs);
         return [$url, $alias, count($breadcrumbs) == 1 ? 'index' : $breadcrumbs[0], $breadcrumbs];
     }

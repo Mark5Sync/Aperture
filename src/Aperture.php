@@ -22,7 +22,7 @@ abstract class Aperture extends Signature
 
 
 
-    public function verificateToken(string $token): bool
+    public function verificateToken(?string $token): bool
     {
         return false;
     }

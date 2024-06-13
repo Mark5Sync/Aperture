@@ -12,7 +12,7 @@ use Aperture\api\Redirect;
 trait api {
     use provider;
 
-   function createRequest(): Request { return new Request($this); }
+   function createRequest(): Request { return new Request($this, $this->super('createRequest')); }
    function createRedirect(): Redirect { return new Redirect; }
 
 }
