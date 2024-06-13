@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "composer/class-map-generator",
-            "version": "1.3.2",
+            "version": "1.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/class-map-generator.git",
-                "reference": "acd227952154850d0bb7d65caa4f9edf9cd806a7"
+                "reference": "b1b3fd0b4eaf3ddf3ee230bc340bf3fff454a1a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/class-map-generator/zipball/acd227952154850d0bb7d65caa4f9edf9cd806a7",
-                "reference": "acd227952154850d0bb7d65caa4f9edf9cd806a7",
+                "url": "https://api.github.com/repos/composer/class-map-generator/zipball/b1b3fd0b4eaf3ddf3ee230bc340bf3fff454a1a3",
+                "reference": "b1b3fd0b4eaf3ddf3ee230bc340bf3fff454a1a3",
                 "shasum": ""
             },
             "require": {
@@ -61,7 +61,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/class-map-generator/issues",
-                "source": "https://github.com/composer/class-map-generator/tree/1.3.2"
+                "source": "https://github.com/composer/class-map-generator/tree/1.3.4"
             },
             "funding": [
                 {
@@ -77,7 +77,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-31T19:45:56+00:00"
+            "time": "2024-06-12T14:13:04+00:00"
         },
         {
             "name": "composer/pcre",
@@ -214,16 +214,16 @@
         },
         {
             "name": "marksync/provider",
-            "version": "v1.1.3",
+            "version": "v1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Mark5Sync/provider.git",
-                "reference": "857b71eb6b06d04d30725b0e9d46d0ee8b32445a"
+                "reference": "d2415769c9d119332df13c7ae50d29367f6576f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Mark5Sync/provider/zipball/857b71eb6b06d04d30725b0e9d46d0ee8b32445a",
-                "reference": "857b71eb6b06d04d30725b0e9d46d0ee8b32445a",
+                "url": "https://api.github.com/repos/Mark5Sync/provider/zipball/d2415769c9d119332df13c7ae50d29367f6576f5",
+                "reference": "d2415769c9d119332df13c7ae50d29367f6576f5",
                 "shasum": ""
             },
             "require": {
@@ -252,9 +252,9 @@
             "description": "provider",
             "support": {
                 "issues": "https://github.com/Mark5Sync/provider/issues",
-                "source": "https://github.com/Mark5Sync/provider/tree/v1.1.3"
+                "source": "https://github.com/Mark5Sync/provider/tree/v1.1.4"
             },
-            "time": "2024-06-06T07:06:50+00:00"
+            "time": "2024-06-13T07:23:39+00:00"
         },
         {
             "name": "phpoption/phpoption",
