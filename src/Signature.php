@@ -11,17 +11,20 @@ abstract class Signature extends ApertureConfig
 
     function runTask()
     {
-        $class = stripslashes($this->namespace . "\\" . $this->request->task);
+        try {
+            $class = stripslashes($this->namespace . "\\" . $this->request->task);
+        } catch (\Throwable $th) {
+            http_response_code(404);
+
+            return ['error' => new Error($th->getMessage(), $th->getCode())];
+        }
 
         try {
             $task = new $class;
         } catch (\Throwable $th) {
             http_response_code(404);
 
-            return [
-                'message' => "{$this->request->task} not found",
-                'code' => 404,
-            ];
+            return ['error' => new Error("{$this->request->task} not found", 404)];
         }
 
         try {

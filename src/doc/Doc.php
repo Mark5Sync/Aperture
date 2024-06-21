@@ -38,7 +38,7 @@ class Doc
             $result = [];
             $exceptions = [];
             $times = [];
-
+            $inputs = [];
 
 
 
@@ -56,7 +56,10 @@ class Doc
                     }
                 };
 
-                foreach ($task->test($test) as $_);
+                foreach ($task->test($test) as $pass){
+                    if ($pass)
+                        $result = [...$result, $pass];
+                }
 
                 $inputs = $this->getTaskInputs($task, $alias);
             } catch (\Throwable $th) {
