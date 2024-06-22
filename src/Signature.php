@@ -8,6 +8,19 @@ abstract class Signature extends ApertureConfig
 {
     use api;
 
+    final function __construct()
+    {
+        header('Content-Type: application/json');
+        ini_set('display_errors', 0);
+
+        $strResult = json_encode($this->runTask());
+
+        if ($strResult === false)
+            $strResult = json_encode(['error' => $this->getJsonError()]);
+
+        exit($strResult);
+    }
+
 
     function runTask()
     {

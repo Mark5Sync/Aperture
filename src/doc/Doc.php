@@ -58,7 +58,7 @@ class Doc
 
                 foreach ($task->test($test) as $pass){
                     if ($pass)
-                        $result = [...$result, $pass];
+                        $result = [...$result, $pass, '__warning__' => '⚠️⚠️⚠️'];
                 }
 
                 $inputs = $this->getTaskInputs($task, $alias);

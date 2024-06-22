@@ -8,8 +8,16 @@ class Route
 {
     use api;
 
+    function __invoke()
+    {
+        return 'Hello from default route';
+    }
+
+
+
     function beforeTest()
     {
+
     }
 
     function test(callable $invoke)
@@ -19,5 +27,6 @@ class Route
 
     function afterTest()
     {
+        
     }
 }
