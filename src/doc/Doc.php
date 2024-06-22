@@ -36,6 +36,7 @@ class Doc
 
             [$url, $alias, $section, $breadcrumbs] = $this->getQueryFromNamespace($route);
             $result = [];
+            $warning = false;
             $exceptions = [];
             $times = [];
             $inputs = [];
@@ -57,8 +58,10 @@ class Doc
                 };
 
                 foreach ($task->test($test) as $pass){
-                    if ($pass)
-                        $result = [...$result, $pass, '__warning__' => '⚠️⚠️⚠️'];
+                    if (!$pass)
+                        continue;
+                    $warning  = true;
+                    $result = [...$result, $pass];
                 }
 
                 $inputs = $this->getTaskInputs($task, $alias);
@@ -69,6 +72,7 @@ class Doc
             $time = empty($times) ? 0 : array_sum($times) / count($times);
 
             $this->schema[] = [
+                'warning' => $warning ? '⚠️' : false,
                 'url' => $url,
                 'alias' => $alias,
                 'section' => $section,
@@ -77,6 +81,8 @@ class Doc
                 'outputType'  => count($result) ? (count($result) < 2 ? $result[0] : new Join("{$alias}Output", $result)) : null,
                 'exceptions' => $exceptions,
                 'time' => $time,
+                'path' => $path,
+                'doc' => $reflection->getDocComment(),
             ];
         }
     }
