@@ -8,22 +8,20 @@ class Route
 {
     use api;
 
-    function __invoke()
-    {
-        return 'Hello from default route';
-    }
 
-
-
-    function beforeTest()
-    {
-
-    }
 
     function test(callable $invoke)
     {
         return $invoke();
     }
+
+
+    
+    function beforeTest()
+    {
+
+    }
+
 
     function afterTest()
     {

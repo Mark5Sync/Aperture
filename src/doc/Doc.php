@@ -75,6 +75,7 @@ class Doc
                 'warning' => $warning ? '⚠️' : false,
                 'url' => $url,
                 'alias' => $alias,
+                'shortAlias' => $reflection->getShortName(),
                 'section' => $section,
                 'breadcrumbs' => $breadcrumbs,
                 'inputType'   => $inputs,
