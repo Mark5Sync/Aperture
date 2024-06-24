@@ -57,7 +57,7 @@ class Doc
                     }
                 };
 
-                foreach ($task->test($test) as $pass){
+                foreach ($task->test($test) as $pass) {
                     if (!$pass)
                         continue;
                     $warning  = true;
@@ -87,6 +87,7 @@ class Doc
             ];
         }
     }
+
 
 
     private function getTaskInputs($task, string $alias)
@@ -122,6 +123,7 @@ class Doc
 
         return $type;
     }
+
 
 
     private function getInputType($alias, $name, $canToBeNull)

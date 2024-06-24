@@ -5,7 +5,7 @@ namespace Aperture;
 class Error implements \JsonSerializable
 {
 
-    function __construct(private string $message, private int $code)
+    function __construct(private string $message, private string $code)
     {
     }
 
