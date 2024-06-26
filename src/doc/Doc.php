@@ -2,6 +2,7 @@
 
 namespace Aperture\doc;
 
+use Aperture\_markers\api;
 use Aperture\Error;
 use Aperture\Route;
 use Composer\ClassMapGenerator\ClassMapGenerator;
@@ -10,6 +11,8 @@ use ReflectionMethod;
 
 class Doc
 {
+    use api;
+
     private $schema = [];
 
 
@@ -70,9 +73,10 @@ class Doc
             }
 
             $time = empty($times) ? 0 : array_sum($times) / count($times);
+            $docs = $reflection->getDocComment();
 
             $this->schema[] = [
-                'warning' => $warning ? '⚠️' : false,
+                'warning' => $warning,
                 'url' => $url,
                 'alias' => $alias,
                 'shortAlias' => $reflection->getShortName(),
@@ -83,7 +87,8 @@ class Doc
                 'exceptions' => $exceptions,
                 'time' => $time,
                 'path' => $path,
-                'doc' => $reflection->getDocComment(),
+                'doc' => $docs,
+                'tags' => $this->tag->export(),
             ];
         }
     }
