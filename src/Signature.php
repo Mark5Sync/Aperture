@@ -42,7 +42,8 @@ abstract class Signature extends ApertureConfig
 
         try {
             $params = $this->request->params;
-            $result['data'] = $task(...$params);
+            $data = $task(...$params);
+            $result['data'] = $this->pagination->wrapResult($data);
         } catch (\Throwable $th) {
             $result['error'] = new Error($th->getMessage(), $th->getCode());
             $this->onError($th);
