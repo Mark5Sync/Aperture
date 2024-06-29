@@ -53,7 +53,7 @@ class Doc
                 $test = function (...$props) use ($task, &$exceptions, &$result, &$times) {
                     try {
                         $start = microtime(true);
-                        $result = [...$result, $task(...$props)];
+                        $result = [...$result, $this->pagination->wrapResult($task(...$props))];
                         $times[] = microtime(true) - $start;
                     } catch (\Throwable $th) {
                         $exceptions[] = new Error($th->getMessage(), $th->getCode());
