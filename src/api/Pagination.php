@@ -2,8 +2,11 @@
 
 namespace Aperture\api;
 
+use Aperture\_markers\api;
+
 class Pagination
 {
+    use api;
 
     public $page = 1;
     public $size = 10;
@@ -25,8 +28,8 @@ class Pagination
     {
         if ($this->use)
             return [
-                'content' => $result,
-                'pagination' => [
+                "content{$this->request->shortTask}" => $result,
+                "pagination" => [
                     'page'  => $this->page,
                     'size'  => $this->size,
                     'pages' => $this->pages,

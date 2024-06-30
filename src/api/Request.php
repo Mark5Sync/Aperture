@@ -13,7 +13,8 @@ class Request
 {
     use cli;
 
-    public string $task;
+    public string $task = 'Index';
+    public string $shortTask = 'Index';
     public array $params = [];
     public array $post = [];
     public array $get  = [];
@@ -39,11 +40,12 @@ class Request
         $request_uri = $_SERVER['REQUEST_URI'];
         $pattern = "/{$this->parent->prefix}\/([\w_,\/]+)?\??/";
 
-        $this->task = 'Index';
-
         if (preg_match($pattern, $request_uri, $matches)) {
-            if (isset($matches[1]))
+            if (isset($matches[1])){
                 $this->task = str_replace('/', '\\\\', $matches[1]);
+                $this->shortTask = array_slice(explode('\\', $this->task), -1)[0];
+            }
+
         }
 
         $post = file_get_contents('php://input');

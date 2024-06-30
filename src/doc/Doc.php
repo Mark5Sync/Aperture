@@ -44,6 +44,7 @@ class Doc
             $times = [];
             $inputs = [];
 
+            $this->request->shortTask = $reflection->getShortName();
 
 
             try {
@@ -79,7 +80,7 @@ class Doc
                 'warning' => $warning,
                 'url' => $url,
                 'alias' => $alias,
-                'shortAlias' => $reflection->getShortName(),
+                'shortAlias' => $this->request->shortTask,
                 'section' => $section,
                 'breadcrumbs' => $breadcrumbs,
                 'inputType'   => $inputs,

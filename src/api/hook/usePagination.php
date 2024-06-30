@@ -14,10 +14,10 @@ trait usePagination
 
     function usePagination()
     {
-        /** @var Model $this */
+        // /** @var Model $this */
         $this->pagination->use = true;
 
-        $this->___page(
+        $this->page(
             $this->pagination->page,
             $this->pagination->size,
             $this->pagination->pages,
