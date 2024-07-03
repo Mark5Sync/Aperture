@@ -3,6 +3,7 @@
 namespace Aperture\doc;
 
 use Aperture\_markers\api;
+use Aperture\_markers\main;
 use Aperture\Error;
 use Aperture\Route;
 use Composer\ClassMapGenerator\ClassMapGenerator;
@@ -12,6 +13,7 @@ use ReflectionMethod;
 class Doc
 {
     use api;
+    use main;
 
     private $schema = [];
 
@@ -54,7 +56,9 @@ class Doc
                 $test = function (...$props) use ($task, &$exceptions, &$result, &$times) {
                     try {
                         $start = microtime(true);
-                        $result = [...$result, $this->pagination->wrapResult($task(...$props))];
+                        $result = [...$result, $this->pagination->wrapResult(
+                            $this->gen->handle($task(...$props))
+                        )];
                         $times[] = microtime(true) - $start;
                     } catch (\Throwable $th) {
                         $exceptions[] = new Error($th->getMessage(), $th->getCode());
