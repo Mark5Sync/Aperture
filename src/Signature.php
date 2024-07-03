@@ -3,10 +3,25 @@
 namespace Aperture;
 
 use Aperture\_markers\api;
+use Generator;
 
 abstract class Signature extends ApertureConfig
 {
     use api;
+    private ?Generator $gen = null;
+
+    final function __construct()
+    {
+        header('Content-Type: application/json');
+        ini_set('display_errors', 0);
+
+        $strResult = json_encode($this->runTask());
+
+        if ($strResult === false)
+            $strResult = json_encode(['error' => $this->getJsonError()]);
+
+        $this->print($strResult);
+    }
 
 
     function runTask()
@@ -29,7 +44,13 @@ abstract class Signature extends ApertureConfig
 
         try {
             $params = $this->request->params;
-            $result['data'] = $task(...$params);
+            $data = $task(...$params);
+            if ($data instanceof Generator) {
+                $this->gen = $data;
+                $data = $this->gen->current();
+            }
+
+            $result['data'] = $this->pagination->wrapResult($data);
         } catch (\Throwable $th) {
             $result['error'] = new Error($th->getMessage(), $th->getCode());
             $this->onError($th);
@@ -45,7 +66,16 @@ abstract class Signature extends ApertureConfig
         return $result;
     }
 
+    private function print(string $json)
+    {
+        echo $json;
+        if (!$this->gen)
+            exit();
 
+        fastcgi_finish_request();
+
+        $this->gen->next();
+    }
 
     protected function onInit(string $task)
     {

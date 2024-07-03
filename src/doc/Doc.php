@@ -56,7 +56,7 @@ class Doc
                     }
                 };
 
-                foreach ($task->test($test) as $pass){
+                foreach ($task->test($test) as $pass) {
                     if ($pass)
                         $result = [...$result, $pass];
                 }
