@@ -24,7 +24,6 @@ abstract class Signature extends ApertureConfig
     }
 
 
-
     function runTask()
     {
         try {
