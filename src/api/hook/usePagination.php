@@ -3,7 +3,6 @@
 namespace Aperture\api\hook;
 
 use Aperture\_markers\api;
-use blackpostgres\Model;
 
 /** 
  * blackpostgres plugin
