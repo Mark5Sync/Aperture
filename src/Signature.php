@@ -41,12 +41,7 @@ abstract class Signature extends ApertureConfig
         } catch (\Throwable $th) {
             http_response_code(404);
 
-            $code = $th->getCode();
-            if ($code==0) {
-                return ['error' => new Error("{$this->request->task} not found", 404)];
-            }
-
-            return ['error' => new Error($th->getMessage(), $code)];
+            return ['error' => new Error("{$this->request->task} not found", 404)];
         }
 
         try {
