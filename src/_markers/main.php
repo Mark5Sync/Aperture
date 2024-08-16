@@ -1,21 +1,24 @@
 <?php
 namespace Aperture\_markers;
 use marksync\provider\provider;
+use Aperture\Route;
 use Aperture\Gen;
 use Aperture\Error;
-use Aperture\Route;
+use Aperture\Middleware;
 
 /**
+ * @property-read Route $route
  * @property-read Gen $gen
  * @property-read Error $error
- * @property-read Route $route
+ * @property-read Middleware $middleware
 
 */
 trait main {
     use provider;
 
+   function createRoute(): Route { return new Route; }
    function createGen(): Gen { return new Gen; }
    function createError(): Error { return new Error; }
-   function createRoute(): Route { return new Route; }
+   function createMiddleware(): Middleware { return new Middleware; }
 
 }
