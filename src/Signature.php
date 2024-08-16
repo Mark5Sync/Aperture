@@ -39,6 +39,9 @@ abstract class Signature extends ApertureConfig
         try {
             $task = new $class;
         } catch (\Throwable $th) {
+            if ($result = $this->onNotFound($this->namespace . "\\" . $this->request->task))
+                return $result;
+
             http_response_code(404);
 
             return ['error' => new Error("{$this->request->task} not found", 404)];
@@ -72,16 +75,14 @@ abstract class Signature extends ApertureConfig
     }
 
 
-    protected function onInit(string $task)
-    {
-    }
+    protected function onInit(string $task) {}
 
 
 
-    protected function onError(\Throwable $exception)
-    {
-    }
+    protected function onError(\Throwable $exception) {}
 
+
+    protected function onNotFound(string $route) {}
 
 
     protected function onResult($result)

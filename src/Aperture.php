@@ -16,20 +16,14 @@ abstract class Aperture extends Signature
     }
 
 
-    public function middleware(Route $route, string $path) {
-
-    }
+    public function middleware(Route $route, string $path) {}
 
 
-    protected function onInit(string $task)
-    {
-
-    }
+    protected function onInit(string $task) {}
 
 
-    protected function onError(\Throwable $exception)
-    {
-        
-    }
+    protected function onError(\Throwable $exception) {}
 
+
+    protected function onNotFound(string $route) {}
 }
