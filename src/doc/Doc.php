@@ -110,11 +110,8 @@ class Doc
 
         foreach ($reflectionMethod->getParameters() as $index => $propertie) {
             $ucfirst = ucfirst($propertie->name);
-            $type = $this->getParametrType($propertie, "{$alias}{$ucfirst}Input");
-            $inputs[$propertie->name] = match ($type) {
-                'array' => new Join("{$alias}{$ucfirst}InputArray", array_column($data, $index)),
-                default => $type,
-            };
+            $type = $this->getParametrType($propertie, "{$alias}{$ucfirst}Input", array_column($data, $index));
+            $inputs[$propertie->name] = $type;
         }
 
         if (empty($inputs))
@@ -125,14 +122,14 @@ class Doc
 
 
 
-    private function getParametrType(\ReflectionParameter $propertie, string $alias)
+    private function getParametrType(\ReflectionParameter $propertie, string $alias, array $data)
     {
         $type = $propertie->getType();
 
         if (!$type)
             $type = 'null';
         else if ($type instanceof \ReflectionNamedType)
-            $type = $this->getInputType($alias, $type->getName(), $propertie->allowsNull());
+            $type = $this->getInputType($alias, $type->getName(), $propertie->allowsNull(), $data);
         else if ($type instanceof \ReflectionUnionType)
             $type = array_map(fn($tp) => "$tp", $type->getTypes());
 
@@ -142,7 +139,7 @@ class Doc
 
 
 
-    private function getInputType($alias, $name, $canToBeNull)
+    private function getInputType($alias, $name, $canToBeNull, $data)
     {
         $result = null;
         switch ($name) {
@@ -155,7 +152,7 @@ class Doc
                 $result = 'string';
                 break;
             case 'array':
-                $result = 'array';
+                $result = $data;
                 break;
 
             case 'bool':
@@ -163,13 +160,14 @@ class Doc
                 break;
 
             default:
-                $result = 'avy';
+                $result = 'any';
         }
 
         if ($canToBeNull)
-            return new Join($alias, [null, $result]);
+            return new Join($alias, [null, ...(array)$result]);
 
-        return $result;
+
+        return is_array($result) ? new Join($alias, $result) : $result;
     }
 
 
