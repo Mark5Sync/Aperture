@@ -41,7 +41,7 @@ abstract class Signature extends ApertureConfig
         } catch (\Throwable $th) {
             http_response_code(404);
 
-            return ['error' => new Error("{$this->request->task} not found", 404)];
+            return ['error' => new Error("{$this->request->task} - {$th->getMessage()}", 404)];
         }
 
         try {
@@ -72,15 +72,11 @@ abstract class Signature extends ApertureConfig
     }
 
 
-    protected function onInit(string $task)
-    {
-    }
+    protected function onInit(string $task) {}
 
 
 
-    protected function onError(\Throwable $exception)
-    {
-    }
+    protected function onError(\Throwable $exception) {}
 
 
 
