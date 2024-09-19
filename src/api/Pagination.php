@@ -23,12 +23,17 @@ class Pagination
     }
 
 
+    function use()
+    {
+        $this->use = true;
+    }
+
 
     function wrapResult($result)
     {
-        if ($this->use){
+        if ($this->use) {
             $this->use = false;
-    
+
             return [
                 "content{$this->request->shortTask}" => $result,
                 "pagination" => [
@@ -39,7 +44,7 @@ class Pagination
             ];
         }
 
-        
+
         return $result;
     }
 }
