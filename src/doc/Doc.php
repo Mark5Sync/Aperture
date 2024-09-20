@@ -18,9 +18,7 @@ class Doc
     private $schema = [];
 
 
-    function __construct(private string $routes, private string $namespace)
-    {
-    }
+    function __construct(private string $routes, private string $namespace) {}
 
 
     function build()
@@ -69,7 +67,7 @@ class Doc
                     if (!$pass)
                         continue;
                     $warning  = true;
-                    $result = [...$result, $pass];
+                    $result = [...$result, $this->pagination->wrapResult($pass)];
                 }
 
                 $inputs = $this->getTaskInputs($task, $alias);
@@ -128,7 +126,7 @@ class Doc
         else if ($type instanceof \ReflectionNamedType)
             $type = $this->getInputType($alias, $type->getName(), $propertie->allowsNull());
         else if ($type instanceof \ReflectionUnionType)
-            $type = array_map(fn ($tp) => "$tp", $type->getTypes());
+            $type = array_map(fn($tp) => "$tp", $type->getTypes());
 
 
         return $type;
