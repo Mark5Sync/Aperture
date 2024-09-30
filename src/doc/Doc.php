@@ -43,6 +43,7 @@ class Doc
             $exceptions = [];
             $times = [];
             $inputs = [];
+            $inputData = [];
 
             $this->request->shortTask = $reflection->getShortName();
 
@@ -51,9 +52,10 @@ class Doc
                 $task = new $route;
 
 
-                $test = function (...$props) use ($task, &$exceptions, &$result, &$times) {
+                $test = function (...$props) use ($task, &$exceptions, &$result, &$times, &$inputData) {
                     try {
                         $start = microtime(true);
+                        $inputData[] = $props;
                         $result = [...$result, $this->pagination->wrapResult(
                             $this->gen->handle($task(...$props))
                         )];
@@ -70,7 +72,7 @@ class Doc
                     $result = [...$result, $this->pagination->wrapResult($pass)];
                 }
 
-                $inputs = $this->getTaskInputs($task, $alias);
+                $inputs = $this->getTaskInputs($task, $alias, $inputData);
             } catch (\Throwable $th) {
                 $exceptions[] = new Error($th->getMessage(), $th->getCode());
             }
@@ -98,15 +100,16 @@ class Doc
 
 
 
-    private function getTaskInputs($task, string $alias)
+    private function getTaskInputs($task, string $alias, array $data)
     {
         $reflectionMethod = new ReflectionMethod($task, '__invoke');
 
         $inputs = [];
 
-        foreach ($reflectionMethod->getParameters() as $propertie) {
+        foreach ($reflectionMethod->getParameters() as $index => $propertie) {
             $ucfirst = ucfirst($propertie->name);
-            $inputs[$propertie->name] = $this->getParametrType($propertie, "{$alias}{$ucfirst}Input");
+            $type = $this->getParametrType($propertie, "{$alias}{$ucfirst}Input", array_column($data, $index));
+            $inputs[$propertie->name] = $type;
         }
 
         if (empty($inputs))
@@ -114,6 +117,7 @@ class Doc
 
         return $inputs;
     }
+
 
 
 
