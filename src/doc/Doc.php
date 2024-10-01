@@ -56,9 +56,7 @@ class Doc
                     try {
                         $start = microtime(true);
                         $inputData[] = $props;
-                        $result = [...$result, $this->pagination->wrapResult(
-                            $this->gen->handle($task(...$props))
-                        )];
+                        $result = [...$result, $this->gen->handle($task(...$props))];
                         $times[] = microtime(true) - $start;
                     } catch (\Throwable $th) {
                         $exceptions[] = new Error($th->getMessage(), $th->getCode());
@@ -68,8 +66,8 @@ class Doc
                 foreach ($task->test($test) as $pass) {
                     if (!$pass)
                         continue;
-                    $warning  = true;
-                    $result = [...$result, $this->pagination->wrapResult($pass)];
+                    $warning = true;
+                    $result = [...$result, $pass];
                 }
 
                 $inputs = $this->getTaskInputs($task, $alias, $inputData);
@@ -88,7 +86,7 @@ class Doc
                 'section' => $section,
                 'breadcrumbs' => $breadcrumbs,
                 'inputType'   => $inputs,
-                'outputType'  => count($result) ? (count($result) < 2 ? $result[0] : new Join("{$alias}Output", $result)) : null,
+                'outputType'  => $this->pagination->wrapResult(count($result) ? (count($result) < 2 ? $result[0] : new Join("{$alias}Output", $result)) : null),
                 'exceptions' => $exceptions,
                 'time' => $time,
                 'path' => $path,
