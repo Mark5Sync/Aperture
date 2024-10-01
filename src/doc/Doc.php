@@ -98,7 +98,26 @@ class Doc
         }
     }
 
+    private function getDataProps(array $data, string $key, int $index): array
+    {
+        if (empty($data))
+            return [];
 
+        $isAssociativeArray = array_keys($data[0]) !== range(0, count($data[0]) - 1);
+
+        if (!$isAssociativeArray) {
+            $result = array_column($data, $index);
+            return $result;
+        }
+
+        $result = [];
+        foreach ($data as $values) {
+            if (isset($values[$key]))
+                $result[] = $values[$key];
+        }
+
+        return $result;
+    }
 
     private function getTaskInputs($task, string $alias, array $data)
     {
@@ -108,7 +127,7 @@ class Doc
 
         foreach ($reflectionMethod->getParameters() as $index => $propertie) {
             $ucfirst = ucfirst($propertie->name);
-            $type = $this->getParametrType($propertie, "{$alias}{$ucfirst}Input", array_column($data, $index));
+            $type = $this->getParametrType($propertie, "{$alias}{$ucfirst}Input", $this->getDataProps($data, $propertie->name, $index));
             $inputs[$propertie->name] = $type;
         }
 
@@ -121,14 +140,14 @@ class Doc
 
 
 
-    private function getParametrType(\ReflectionParameter $propertie, string $alias)
+    private function getParametrType(\ReflectionParameter $propertie, string $alias, array $data)
     {
         $type = $propertie->getType();
 
         if (!$type)
             $type = 'null';
         else if ($type instanceof \ReflectionNamedType)
-            $type = $this->getInputType($alias, $type->getName(), $propertie->allowsNull());
+            $type = $this->getInputType($alias, $type->getName(), $propertie->allowsNull(), $data);
         else if ($type instanceof \ReflectionUnionType)
             $type = array_map(fn($tp) => "$tp", $type->getTypes());
 
@@ -138,7 +157,7 @@ class Doc
 
 
 
-    private function getInputType($alias, $name, $canToBeNull)
+    private function getInputType($alias, $name, $canToBeNull, $data)
     {
         $result = null;
         switch ($name) {
@@ -151,7 +170,7 @@ class Doc
                 $result = 'string';
                 break;
             case 'array':
-                $result = [];
+                $result = $data;
                 break;
 
             case 'bool':
@@ -159,13 +178,14 @@ class Doc
                 break;
 
             default:
-                $result = 'avy';
+                $result = 'any';
         }
 
         if ($canToBeNull)
-            return new Join($alias, [null, $result]);
+            return new Join($alias, [null, ...(array)$result]);
 
-        return $result;
+
+        return is_array($result) ? new Join($alias, $result) : $result;
     }
 
 
