@@ -10,10 +10,13 @@ class Ob
 
     function start()
     {
-        ob_start(function ($log) use (&$logs) {
-            if ($log)
-                $this->logs[] = $log;
-        }, 1);
+        ob_start(
+            function ($log) {
+                if ($log)
+                    $this->logs[] = $log;
+            },
+            1,
+        );
     }
 
 
