@@ -11,18 +11,30 @@ abstract class Signature extends ApertureConfig
     use main;
 
 
-
     final function __construct()
     {
         header('Content-Type: application/json');
         ini_set('display_errors', 0);
 
+        $this->ob->start();
+
         $strResult = json_encode($this->runTask());
+
+        $this->ob->clear();
 
         if ($strResult === false)
             $strResult = json_encode(['error' => $this->getJsonError()]);
 
         $this->print($strResult);
+    }
+
+
+    function __destruct()
+    {
+        $this->ob->clear();
+
+        if ($logs = $this->ob->getLog())
+            $this->onLog($logs);
     }
 
 
@@ -80,6 +92,10 @@ abstract class Signature extends ApertureConfig
 
 
 
+    protected function onLog(array $logs) {}
+
+
+
     protected function onResult($result)
     {
         if ($this->pagination->use)
@@ -111,5 +127,12 @@ abstract class Signature extends ApertureConfig
             default:
                 return 'json_encode - Неизвестная ошибка';
         }
+    }
+
+
+    function exit($content)
+    {
+        ob_end_flush();
+        exit($content);
     }
 }

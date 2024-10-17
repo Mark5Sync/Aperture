@@ -174,7 +174,8 @@ class Request
                 $docs = new Doc($this->parent->routes, $this->parent->namespace);
                 $docs->build($mask);
 
-                exit(json_encode($docs->getScheme()));
+
+                $this->parent->exit(json_encode($docs->getScheme()));
 
             case '__ApertureTask__':
                 $this->getTokenMask();
