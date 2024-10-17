@@ -5,6 +5,7 @@ namespace Aperture\api;
 use Aperture\_markers\cli;
 use Aperture\Aperture;
 use Aperture\doc\Doc;
+use Aperture\mask\Mask;
 use marksync\provider\Mark;
 use ReflectionMethod;
 
@@ -41,11 +42,10 @@ class Request
         $pattern = "/{$this->parent->prefix}\/([\w_,\/]+)?\??/";
 
         if (preg_match($pattern, $request_uri, $matches)) {
-            if (isset($matches[1])){
+            if (isset($matches[1])) {
                 $this->task = str_replace('/', '\\\\', $matches[1]);
                 $this->shortTask = array_slice(explode('\\', $this->task), -1)[0];
             }
-
         }
 
         $post = file_get_contents('php://input');
@@ -168,17 +168,16 @@ class Request
 
 
             case '__doc__':
-                $this->checkToken();
-
+                $mask = new Mask($this->getTokenMask());
                 $this->isDebug = true;
 
                 $docs = new Doc($this->parent->routes, $this->parent->namespace);
-                $docs->build();
+                $docs->build($mask);
+
                 exit(json_encode($docs->getScheme()));
 
-
             case '__ApertureTask__':
-                $this->checkToken();
+                $this->getTokenMask();
                 ['task' => $task, 'data' => $data] = $this->params;
 
                 try {
@@ -197,12 +196,15 @@ class Request
     }
 
 
-    private function checkToken()
+    private function getTokenMask(): string
     {
         ['token' => $token] = ['token' => null, ...$this->params];
-        if (!$this->parent->verificateToken($token)) {
+        $mask = $this->parent->verificateToken($token);
+        if (!$mask) {
             http_response_code(401);
             throw new \Exception("Invalid token", 401);
         }
+
+        return $mask === true ? '' : $mask;
     }
 }

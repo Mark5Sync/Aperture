@@ -10,7 +10,7 @@ abstract class Aperture extends Signature
     public string $prefix = 'Api';
 
 
-    public function verificateToken(?string $token): bool
+    public function verificateToken(?string $token): bool | string
     {
         return false;
     }

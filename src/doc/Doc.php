@@ -5,6 +5,7 @@ namespace Aperture\doc;
 use Aperture\_markers\api;
 use Aperture\_markers\main;
 use Aperture\Error;
+use Aperture\mask\Mask;
 use Aperture\Route;
 use Composer\ClassMapGenerator\ClassMapGenerator;
 use marksync\provider\NamespaceController;
@@ -21,13 +22,16 @@ class Doc
     function __construct(private string $routes, private string $namespace) {}
 
 
-    function build()
+    function build(Mask $mask)
     {
         $map = ClassMapGenerator::createMap($this->routes);
 
         (new NamespaceController($this->routes, trim($this->namespace, '\\')))->handle($map);
 
         foreach ($map as $route => $path) {
+            if (!$mask->check($route))
+                continue;
+
             try {
                 $reflection = new \ReflectionClass($route);
             } catch (\Throwable $th) {
