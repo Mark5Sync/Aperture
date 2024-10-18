@@ -9,22 +9,28 @@ class Route
     use api;
 
 
-
     function test(callable $invoke)
     {
         return $invoke();
     }
 
 
-    
-    function beforeTest()
+    function beforeTest() 
     {
 
     }
 
 
-    function afterTest()
+    function afterTest() 
     {
-        
+
     }
+
+
+    function onLog(array $logs)
+    {
+
+    }
+
+
 }

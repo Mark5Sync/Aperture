@@ -10,6 +10,7 @@ abstract class Signature extends ApertureConfig
     use api;
     use main;
 
+    protected Route $task;
 
     final function __construct()
     {
@@ -49,7 +50,7 @@ abstract class Signature extends ApertureConfig
         }
 
         try {
-            $task = new $class;
+            $this->task = new $class;
         } catch (\Throwable $th) {
             http_response_code(404);
 
@@ -59,7 +60,7 @@ abstract class Signature extends ApertureConfig
         try {
             $params = $this->request->params;
             $result['data'] = $this->pagination->wrapResult(
-                $this->gen->handle($task(...$params))
+                $this->gen->handle(($this->task)(...$params))
             );
         } catch (\Throwable $th) {
             $result['error'] = new Error($th->getMessage(), $th->getCode());
@@ -92,7 +93,10 @@ abstract class Signature extends ApertureConfig
 
 
 
-    protected function onLog(array $logs) {}
+    protected function onLog(array $logs)
+    {
+        $this->task->onLog($logs);
+    }
 
 
 
