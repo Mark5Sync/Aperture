@@ -2,6 +2,8 @@
 
 namespace Aperture;
 
+use Aperture\proxy\ProxyController;
+
 abstract class Aperture extends Signature
 {
 
@@ -15,21 +17,23 @@ abstract class Aperture extends Signature
         return false;
     }
 
-
-    public function middleware(Route $route, string $path) {
-
-    }
-
-
-    protected function onInit(string $task)
+    public function middleware(Route $route, string $path) 
     {
 
     }
 
+    protected function onInit(string $task) 
+    {
 
-    protected function onError(\Throwable $exception)
+    }
+
+    protected function onError(\Throwable $exception) 
+    {
+
+    }
+
+    public function proxys(ProxyController $proxy): void
     {
         
     }
-
 }

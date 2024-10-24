@@ -4,11 +4,14 @@ namespace Aperture;
 
 use Aperture\_markers\api;
 use Aperture\_markers\main;
+use Aperture\_markers\proxy;
+use Aperture\proxy\ProxyController;
 
 abstract class Signature extends ApertureConfig
 {
     use api;
     use main;
+    use proxy;
 
     protected Route $task;
 
@@ -17,11 +20,7 @@ abstract class Signature extends ApertureConfig
         header('Content-Type: application/json');
         ini_set('display_errors', 0);
 
-        $this->ob->start();
-
         $strResult = json_encode($this->runTask());
-
-        $this->ob->clear();
 
         if ($strResult === false)
             $strResult = json_encode(['error' => $this->getJsonError()]);
@@ -49,6 +48,17 @@ abstract class Signature extends ApertureConfig
             return ['error' => new Error($th->getMessage(), $th->getCode())];
         }
 
+
+        try {
+            $this->proxyController->checkMask($class);
+        } catch (\Throwable $th) {
+            $result['error'] = new Error($th->getMessage(), $th->getCode());
+            http_response_code(400);
+            return $result;
+        }
+
+        $this->ob->start();
+
         try {
             $this->task = new $class;
         } catch (\Throwable $th) {
@@ -74,6 +84,8 @@ abstract class Signature extends ApertureConfig
         if (!empty($this->request->exceptions))
             $result['exceptions'] = $this->request->exceptions;
 
+        $this->ob->clear();
+
         return $result;
     }
 
@@ -98,6 +110,8 @@ abstract class Signature extends ApertureConfig
         $this->task->onLog($logs);
     }
 
+
+    public function proxys(ProxyController $proxy): void {}
 
 
     protected function onResult($result)
