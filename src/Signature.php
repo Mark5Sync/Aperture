@@ -62,6 +62,7 @@ abstract class Signature extends ApertureConfig
         try {
             $this->task = new $class;
         } catch (\Throwable $th) {
+            $this->ob->clear();
             http_response_code(404);
 
             return ['error' => new Error("{$this->request->task} - {$th->getMessage()}", 404)];
@@ -73,6 +74,7 @@ abstract class Signature extends ApertureConfig
                 $this->gen->handle(($this->task)(...$params))
             );
         } catch (\Throwable $th) {
+            $this->ob->clear();
             $result['error'] = new Error($th->getMessage(), $th->getCode());
             $this->onError($th);
             http_response_code(400);

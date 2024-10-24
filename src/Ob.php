@@ -7,6 +7,7 @@ class Ob
 {
 
     private $logs = [];
+    private $catch = false;
 
     function start()
     {
@@ -17,12 +18,17 @@ class Ob
             },
             1,
         );
+
+        $this->catch = true;
     }
 
 
     function clear()
     {
-        ob_end_flush();
+        if ($this->catch)
+            ob_end_flush();
+
+        $this->catch = false;
     }
 
 

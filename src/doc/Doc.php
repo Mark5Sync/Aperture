@@ -4,8 +4,10 @@ namespace Aperture\doc;
 
 use Aperture\_markers\api;
 use Aperture\_markers\main;
+use Aperture\Aperture;
 use Aperture\Error;
 use Aperture\mask\Mask;
+use Aperture\proxy\ProxyController;
 use Aperture\Route;
 use Composer\ClassMapGenerator\ClassMapGenerator;
 use marksync\provider\NamespaceController;
@@ -17,12 +19,13 @@ class Doc
     use main;
 
     private $schema = [];
+    private $version = 2;
 
 
     function __construct(private string $routes, private string $namespace) {}
 
 
-    function build(Mask $mask)
+    function build(Mask $mask, Aperture $api)
     {
         $map = ClassMapGenerator::createMap($this->routes);
 
@@ -204,12 +207,31 @@ class Doc
     }
 
 
+    function proxys(ProxyController $proxy)
+    {
+        $this->parent->proxys($proxy);
+    }
+
+
+    function proxyDoc($server)
+    {
+        $data = file_get_contents("{$server->url}/{$server->api}/__doc__?token={$server->token}");
+        if (!$data)
+            return;
+
+        $data = json_decode($data, true);
+        if (!isset($data['version']) || $data['version'] != $this->version)
+            return;
+
+        $this->schema = [...$this->schema, ...$data['schema']];
+    }
+
 
     function getScheme(): array
     {
         return [
             'schema' => $this->schema,
-            'version' => 2,
+            'version' => $this->version,
         ];
     }
 }

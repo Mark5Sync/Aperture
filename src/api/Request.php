@@ -3,6 +3,7 @@
 namespace Aperture\api;
 
 use Aperture\_markers\cli;
+use Aperture\_markers\proxy;
 use Aperture\Aperture;
 use Aperture\doc\Doc;
 use Aperture\mask\Mask;
@@ -166,15 +167,14 @@ class Request
                 exit('merge');
                 break;
 
-
             case '__doc__':
                 $mask = new Mask($this->getTokenMask());
                 $this->isDebug = true;
 
                 $docs = new Doc($this->parent->routes, $this->parent->namespace);
-                $docs->build($mask);
-
-
+                $docs->build($mask, $this->parent);
+                $this->parent->proxyController->useDoc($docs);
+                
                 $this->parent->exit(json_encode($docs->getScheme()));
 
             case '__ApertureTask__':
