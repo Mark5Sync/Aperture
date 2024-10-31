@@ -3,10 +3,9 @@
 namespace Aperture\api;
 
 use Aperture\_markers\cli;
-use Aperture\_markers\proxy;
 use Aperture\Aperture;
 use Aperture\doc\Doc;
-use Aperture\mask\Mask;
+use Aperture\pathmask\Mask;
 use marksync\provider\Mark;
 use ReflectionMethod;
 
@@ -168,7 +167,7 @@ class Request
                 break;
 
             case '__doc__':
-                $mask = new Mask($this->getTokenMask());
+                $mask = new Mask($this->getTokenMask(), $this->parent->namespace);
                 $this->isDebug = true;
 
                 $docs = new Doc($this->parent->routes, $this->parent->namespace);
@@ -197,7 +196,7 @@ class Request
     }
 
 
-    private function getTokenMask(): string
+    private function getTokenMask(): string | array
     {
         ['token' => $token] = ['token' => null, ...$this->params];
         $mask = $this->parent->verificateToken($token);

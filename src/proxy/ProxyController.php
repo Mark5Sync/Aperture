@@ -3,6 +3,7 @@
 namespace Aperture\proxy;
 
 use Aperture\_markers\api;
+use Aperture\_markers\pathmask;
 use Aperture\Aperture;
 use Aperture\doc\Doc;
 use marksync\provider\Mark;
@@ -11,6 +12,7 @@ use marksync\provider\Mark;
 class ProxyController
 {
     use api;
+    use pathmask;
 
     private ?string $task = null;
     private ?Doc $doc;
@@ -38,17 +40,20 @@ class ProxyController
     }
 
 
-    function task(string $mask, string $to, $server)
+    function task(string | array $masks, $server)
     {
         if (!$this->task)
-            return $this->doc->proxyDoc($server);
+            return $this->doc->proxyDoc($server, $masks);
 
-        $url = $this->compareMask($mask, $this->task, $to);
-        if (!$url)
-            return;
+        foreach ((array)$masks as $mask) {
+            [$local, $remote] = explode(':', $mask);
+            $url = $this->maskReplace->compare($local, $this->task, $remote);
+            if (!$url)
+                continue;
 
-        $proxyUrl = $server->url . '/' . str_replace('\\', '/', $url);
-        exit($this->fetch($proxyUrl));
+            $proxyUrl = $server->url . '/' . str_replace('\\', '/', $url);
+            exit($this->fetch($proxyUrl));
+        }
     }
 
 
@@ -58,21 +63,8 @@ class ProxyController
         curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($c, CURLOPT_POSTFIELDS, json_encode($this->request->params, JSON_UNESCAPED_UNICODE));
         $result = curl_exec($c);
-        
+
         return $result;
     }
 
-
-    private function compareMask(string $mask, string $task, string $to): ?string
-    {
-        if (!str_ends_with($mask, '*') && $mask == $task)
-            return $to;
-
-        if (str_starts_with($task, substr($mask, 0, -1))) {
-            $result = substr($to, 0, -1) . substr($task, strlen($mask) - 1);
-            return $result;
-        }
-
-        return false;
-    }
 }

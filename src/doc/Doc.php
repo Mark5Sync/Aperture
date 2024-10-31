@@ -4,9 +4,10 @@ namespace Aperture\doc;
 
 use Aperture\_markers\api;
 use Aperture\_markers\main;
+use Aperture\_markers\pathmask;
 use Aperture\Aperture;
 use Aperture\Error;
-use Aperture\mask\Mask;
+use Aperture\pathmask\Mask;
 use Aperture\proxy\ProxyController;
 use Aperture\Route;
 use Composer\ClassMapGenerator\ClassMapGenerator;
@@ -17,6 +18,7 @@ class Doc
 {
     use api;
     use main;
+    use pathmask;
 
     private $schema = [];
     private $version = 2;
@@ -213,7 +215,7 @@ class Doc
     }
 
 
-    function proxyDoc($server)
+    function proxyDoc($server, array | string $alias)
     {
         $data = file_get_contents("{$server->url}/{$server->api}/__doc__?token={$server->token}");
         if (!$data)
@@ -223,9 +225,35 @@ class Doc
         if (!isset($data['version']) || $data['version'] != $this->version)
             return;
 
-        $this->schema = [...$this->schema, ...$data['schema']];
+        $reverceMask = $this->reverseMask($alias);
+        $this->schema = [...$this->schema, ...array_map(fn($task) => $this->applyAliasToRemoteTask($task, $reverceMask), $data['schema'])];
     }
 
+
+    private function applyAliasToRemoteTask($task, array $reverceMask)
+    {
+        foreach ($reverceMask as [$remote, $local]) {
+            if ($url = $this->maskReplace->compare($local, $task['url'], $remote))
+                return [...$task, 'url' => $url, 'alias' => str_replace('/', '', $url)];
+        }
+
+        return $task;
+    }
+
+    private function reverseMask(array | string $alias)
+    {
+        $result = [];
+
+        foreach ((array)$alias as $masks) {
+            [$remote, $local] = explode(':', $masks);
+            $result[] = [
+                str_replace('\\', '/', $remote),
+                str_replace('\\', '/', $local)
+            ];
+        }
+
+        return $result;
+    }
 
     function getScheme(): array
     {
