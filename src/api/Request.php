@@ -48,6 +48,7 @@ class Request
             }
         }
 
+        
         $post = file_get_contents('php://input');
         if ($post)
             $this->post = json_decode($post, true);

@@ -51,7 +51,7 @@ class ProxyController
             if (!$url)
                 continue;
 
-            $proxyUrl = $server->url . '/' . str_replace('\\', '/', $url);
+            $proxyUrl = $server->url . '/' . $server->api . '/' . str_replace('\\', '/', $url);
             exit($this->fetch($proxyUrl));
         }
     }

@@ -42,6 +42,7 @@ abstract class Signature extends ApertureConfig
     {
         try {
             $class = stripslashes($this->namespace . "\\" . $this->request->task);
+            $this->proxyController->checkMask(stripslashes($this->request->task));
         } catch (\Throwable $th) {
             http_response_code(404);
 
@@ -49,13 +50,13 @@ abstract class Signature extends ApertureConfig
         }
 
 
-        try {
-            $this->proxyController->checkMask($class);
-        } catch (\Throwable $th) {
-            $result['error'] = new Error($th->getMessage(), $th->getCode());
-            http_response_code(400);
-            return $result;
-        }
+        // try {
+        //     $this->proxyController->checkMask($class);
+        // } catch (\Throwable $th) {
+        //     $result['error'] = new Error($th->getMessage(), $th->getCode());
+        //     http_response_code(400);
+        //     return $result;
+        // }
 
         $this->ob->start();
 
