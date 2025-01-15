@@ -3,8 +3,6 @@
 namespace Aperture\api\hook;
 
 use Aperture\_markers\api;
-use FLD\Elastic\ElasticFilters;
-use marksync_libs\Elastic\Search\Search;
 
 /** 
  * blackpostgres plugin
@@ -32,7 +30,7 @@ trait usePagination
     {
         $this->pagination->use = 'load_more';
 
-        /** @var ElasticFilters $this */
+        // /** @var Model $this */
         $this->loadMore(
             $this->pagination->page,
             $this->pagination->size,
