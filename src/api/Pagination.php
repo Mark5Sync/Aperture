@@ -11,7 +11,8 @@ class Pagination
     public $page = 1;
     public $size = 10;
     public $pages = null;
-    public $use = false;
+    public $loadMore = false;
+    public $use = false; // pagination or load_more
 
 
     function set(int $page, int $size = 10)
@@ -32,16 +33,27 @@ class Pagination
     function wrapResult($result)
     {
         if ($this->use) {
+            $type = $this->use;
             $this->use = false;
 
-            return [
-                "content{$this->request->shortTask}" => $result,
-                "pagination" => [
-                    'page'  => $this->page,
-                    'size'  => $this->size,
-                    'pages' => $this->pages,
-                ]
-            ];
+            switch ($type) {
+                case 'load_more':
+                    return [
+                        "content{$this->request->shortTask}" => $result,
+                        "load_more" => $this->loadMore,
+                    ];
+            
+                case 'pagination':
+                    return [
+                        "content{$this->request->shortTask}" => $result,
+                        "pagination" => [
+                            'page'  => $this->page,
+                            'size'  => $this->size,
+                            'pages' => $this->pages,
+                        ],
+                    ];
+            }
+
         }
 
 
