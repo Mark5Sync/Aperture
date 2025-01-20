@@ -15,10 +15,19 @@ class Pagination
     public ?string $use = null; // pagination or load_more
 
 
-    function set(int $page, int $size = 10)
+    function setPage(int $page, int $size = 10)
     {
         $this->page = $page;
         $this->size = $size;
+        $this->usePagination();
+    }
+
+
+    function setPageMore(int $page, int $size = 10)
+    {
+        $this->page = $page;
+        $this->size = $size;
+        $this->useLoadMore();
     }
 
 
@@ -46,7 +55,7 @@ class Pagination
                         "content{$this->request->shortTask}" => $result,
                         "load_more" => $this->loadMore,
                     ];
-            
+
                 case 'pagination':
                     return [
                         "content{$this->request->shortTask}" => $result,
@@ -57,7 +66,6 @@ class Pagination
                         ],
                     ];
             }
-
         }
 
 
