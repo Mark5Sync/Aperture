@@ -13,9 +13,10 @@ trait usePagination
 
     function usePagination()
     {
-        // /** @var Model $this */
-        $this->pagination->use = 'pagination';
+        
+        $this->pagination->usePagination();
 
+        // /** @var Model $this */
         $this->page(
             $this->pagination->page,
             $this->pagination->size,
@@ -28,7 +29,7 @@ trait usePagination
 
     function useLoadMore()
     {
-        $this->pagination->use = 'load_more';
+        $this->pagination->useLoadMore();
 
         // /** @var Model $this */
         $this->loadMore(

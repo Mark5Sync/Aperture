@@ -12,21 +12,25 @@ class Pagination
     public $size = 10;
     public $pages = null;
     public $loadMore = false;
-    public $use = false; // pagination or load_more
+    public ?string $use = null; // pagination or load_more
 
 
     function set(int $page, int $size = 10)
     {
         $this->page = $page;
         $this->size = $size;
-
-        $this->use = true;
     }
 
 
-    function use()
+    function usePagination()
     {
-        $this->use = true;
+        $this->use = 'pagination';
+    }
+
+
+    function useLoadMore()
+    {
+        $this->use = 'load_more';
     }
 
 
@@ -34,7 +38,7 @@ class Pagination
     {
         if ($this->use) {
             $type = $this->use;
-            $this->use = false;
+            $this->use = null;
 
             switch ($type) {
                 case 'load_more':
