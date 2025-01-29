@@ -31,7 +31,7 @@ trait usePagination
     {
         $this->pagination->useLoadMore();
 
-        // /** @var Model $this */
+        //  /** @var Model $this */
         $this->loadMore(
             $this->pagination->page,
             $this->pagination->size,
