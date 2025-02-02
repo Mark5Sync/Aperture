@@ -3,6 +3,7 @@
 namespace Aperture\api\hook;
 
 use Aperture\_markers\api;
+use blackpostgres\Table;
 
 /** 
  * blackpostgres plugin
@@ -16,7 +17,7 @@ trait usePagination
         
         $this->pagination->usePagination();
 
-        // /** @var Model $this */
+        /** @var Table $this */
         $this->page(
             $this->pagination->page,
             $this->pagination->size,
@@ -31,7 +32,7 @@ trait usePagination
     {
         $this->pagination->useLoadMore();
 
-        //  /** @var Model $this */
+        /** @var Table $this */
         $this->loadMore(
             $this->pagination->page,
             $this->pagination->size,
