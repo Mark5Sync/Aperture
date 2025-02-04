@@ -40,6 +40,7 @@ class Pagination
     function useLoadMore()
     {
         $this->use = 'load_more';
+        $this->pagination->loadMore = false;
     }
 
 
