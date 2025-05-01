@@ -13,7 +13,7 @@ class MergeController
 
         $merge = [];
 
-        foreach ($tasks as $task => $indexes) {
+        foreach ($tasks as ['url' => $task, 'props' => $indexes, 'id' => $id]) {
             $args = [];
 
             foreach ($indexes as $name => $index) 
@@ -22,11 +22,13 @@ class MergeController
             try {
                 $class = str_replace('/', '\\', substr($task, 1));
                 $merge[] = [
+                    'id' => $id,
                     'url' => $task,
                     'data' => (new $class)(...$args),
                 ];
             } catch (\Throwable $th) {
                 $merge[] = [
+                    'id' => $id,
                     'url' => $task,
                     'error' => ['message' => $th->getMessage(), 'code' => $th->getCode()],
                 ];
