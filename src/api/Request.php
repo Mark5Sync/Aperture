@@ -3,6 +3,7 @@
 namespace Aperture\api;
 
 use Aperture\_markers\cli;
+use Aperture\_markers\merge;
 use Aperture\Aperture;
 use Aperture\doc\Doc;
 use Aperture\pathmask\Mask;
@@ -13,6 +14,7 @@ use ReflectionMethod;
 class Request
 {
     use cli;
+    use merge;
 
     public string $task = 'Index';
     public string $shortTask = 'Index';
@@ -164,7 +166,7 @@ class Request
     {
         switch ($this->task) {
             case '_':
-                exit('merge');
+                $this->mergeController->handle();
                 break;
 
             case '__doc__':
