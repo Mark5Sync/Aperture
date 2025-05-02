@@ -25,8 +25,7 @@ class Doc
 
 
     function __construct(private string $routes, private string $namespace) {}
-
-
+    
     function build(Mask $mask, Aperture $api)
     {
         $map = ClassMapGenerator::createMap($this->routes);

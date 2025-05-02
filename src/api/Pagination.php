@@ -44,22 +44,24 @@ class Pagination
     }
 
 
-    function wrapResult($result)
+    function wrapResult($result, ?string $short = null)
     {
         if ($this->use) {
             $type = $this->use;
             $this->use = null;
 
+            $task = $short ? $short : $this->request->shortTask;
+
             switch ($type) {
                 case 'load_more':
                     return [
-                        "content{$this->request->shortTask}" => $result,
+                        "content{$task}" => $result,
                         "load_more" => $this->loadMore,
                     ];
 
                 case 'pagination':
                     return [
-                        "content{$this->request->shortTask}" => $result,
+                        "content{$task}" => $result,
                         "pagination" => [
                             'page'  => $this->page,
                             'size'  => $this->size,

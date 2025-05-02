@@ -21,10 +21,13 @@ class MergeController
 
             try {
                 $class = str_replace('/', '\\', substr($task, 1));
+                $path = explode('/', $task);
+                $short = end($path);
+
                 $merge[] = [
                     'id' => $id,
                     'url' => $task,
-                    'data' => (new $class)(...$args),
+                    'data' => $this->pagination->wrapResult((new $class)(...$args), $short),
                 ];
             } catch (\Throwable $th) {
                 $merge[] = [
