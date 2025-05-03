@@ -2,10 +2,14 @@
 
 namespace Aperture\merge;
 use Aperture\_markers\api;
+use Aperture\_markers\main;
+use Aperture\_markers\preload;
 
 class MergeController
 {
     use api;
+    use main;
+    use preload;
 
     function handle()
     {
@@ -26,21 +30,23 @@ class MergeController
 
                 $merge[] = [
                     'id' => $id,
-                    'url' => $task,
-                    'data' => $this->pagination->wrapResult((new $class)(...$args), $short),
+                    'data' => $this->handler->run(new $class, $args, $short), //$this->pagination->wrapResult((new $class)(...$args), $short),
                 ];
             } catch (\Throwable $th) {
                 $merge[] = [
                     'id' => $id,
-                    'url' => $task,
                     'error' => ['message' => $th->getMessage(), 'code' => $th->getCode()],
                 ];
             }
         }
 
+        
         $result = [
             'data' => $merge,
         ];
+        
+        if ($preload = $this->preload->get())
+            $result['preload'] = $preload;
 
         exit(json_encode($result));
     }

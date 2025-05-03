@@ -4,6 +4,7 @@ namespace Aperture\api;
 
 use Aperture\_markers\cli;
 use Aperture\_markers\merge;
+use Aperture\_markers\preload;
 use Aperture\Aperture;
 use Aperture\doc\Doc;
 use Aperture\pathmask\Mask;
@@ -15,6 +16,7 @@ class Request
 {
     use cli;
     use merge;
+    use preload;
 
     public string $task = 'Index';
     public string $shortTask = 'Index';

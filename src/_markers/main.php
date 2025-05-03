@@ -1,6 +1,7 @@
 <?php
 namespace Aperture\_markers;
 use marksync\provider\provider;
+use Aperture\Handler;
 use Aperture\Error;
 use Aperture\Route;
 use Aperture\Gen;
@@ -8,6 +9,7 @@ use Aperture\Middleware;
 use Aperture\Ob;
 
 /**
+ * @property-read Handler $handler
  * @property-read Error $error
  * @property-read Route $route
  * @property-read Gen $gen
@@ -18,6 +20,7 @@ use Aperture\Ob;
 trait main {
     use provider;
 
+   function createHandler(): Handler { return new Handler; }
    function createError(): Error { return new Error; }
    function createRoute(): Route { return new Route; }
    function createGen(): Gen { return new Gen; }

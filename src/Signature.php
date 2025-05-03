@@ -4,6 +4,7 @@ namespace Aperture;
 
 use Aperture\_markers\api;
 use Aperture\_markers\main;
+use Aperture\_markers\preload;
 use Aperture\_markers\proxy;
 use Aperture\proxy\ProxyController;
 
@@ -12,6 +13,7 @@ abstract class Signature extends ApertureConfig
     use api;
     use main;
     use proxy;
+    use preload;
 
     protected Route $task;
 
@@ -71,9 +73,7 @@ abstract class Signature extends ApertureConfig
 
         try {
             $params = $this->request->params;
-            $result['data'] = $this->pagination->wrapResult(
-                $this->gen->handle(($this->task)(...$params))
-            );
+            $result['data'] = $this->handler->run($this->task, $params);
         } catch (\Throwable $th) {
             $this->ob->clear();
             $result['error'] = new Error($th->getMessage(), $th->getCode());
@@ -87,10 +87,14 @@ abstract class Signature extends ApertureConfig
         if (!empty($this->request->exceptions))
             $result['exceptions'] = $this->request->exceptions;
 
+        if ($preload = $this->preload->get())
+            $result['preload'] = $preload;
+
         $this->ob->clear();
 
         return $result;
     }
+
 
 
     private function print(string $json)
