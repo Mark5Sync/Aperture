@@ -7,6 +7,7 @@ use Aperture\_markers\main;
 use Aperture\_markers\preload;
 use Aperture\_markers\proxy;
 use Aperture\cashe\Cashe;
+use Aperture\cashe\CasheMergeTransmitter;
 use Aperture\proxy\ProxyController;
 
 abstract class Signature extends ApertureConfig
@@ -18,14 +19,21 @@ abstract class Signature extends ApertureConfig
 
     protected Route $task;
     public ?Cashe $cashe = null;
+    
+    private mixed $useCasheCallback = null;
 
     final function __construct()
     {
         header('Content-Type: application/json');
         ini_set('display_errors', 0);
 
-        if ($this->casheClass)
+        if ($this->casheClass) {
             $this->cashe = new $this->casheClass;
+            $this->useCasheCallback = function(string $json) {
+                $this->ob->clear();
+                exit($json);
+            };
+        }
 
         $strResult = json_encode($this->runTask());
 
@@ -102,8 +110,20 @@ abstract class Signature extends ApertureConfig
 
 
     public function useCashe(string $json) {
-        $this->ob->clear();
-        exit($json);
+        ($this->useCasheCallback)($json);
+    }
+
+
+    private $casheStack = [];
+    function setMergeCasheId(string $id) {
+        $this->useCasheCallback = function(string $json) use($id) {
+            $this->casheStack[$id] = json_decode($json, true);
+            throw new CasheMergeTransmitter("cashe for $id ready", 0);
+        };
+    }
+
+    function getMergeCasheById(string $id) {
+        return $this->casheStack[$id];
     }
 
     private function print(string $json)

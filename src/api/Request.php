@@ -168,7 +168,7 @@ class Request
     {
         switch ($this->task) {
             case '_':
-                $this->mergeController->handle();
+                $this->mergeController->handle($this->parent);
                 break;
 
             case '__doc__':
