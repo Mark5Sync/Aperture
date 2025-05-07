@@ -212,4 +212,23 @@ class Request
 
         return $mask === true ? '' : $mask;
     }
+
+
+    
+    public ?string $requestKey = null;
+    function setСacheKeyIfExistsExit(string $key) {
+        $this->requestKey = $key;
+
+        if ($this->parent->cashe && $this->parent->cashe->exists($key))
+            $this->parent->useCashe($this->parent->cashe->getValue($key));
+    }
+
+
+    function checkCashe(string $result): string {
+        if ($this->requestKey && $this->parent->cashe) {
+            $this->parent->cashe->setValue($this->requestKey, $result);
+        }
+
+        return $result;
+    }
 }

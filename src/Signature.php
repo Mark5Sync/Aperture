@@ -6,6 +6,7 @@ use Aperture\_markers\api;
 use Aperture\_markers\main;
 use Aperture\_markers\preload;
 use Aperture\_markers\proxy;
+use Aperture\cashe\Cashe;
 use Aperture\proxy\ProxyController;
 
 abstract class Signature extends ApertureConfig
@@ -16,11 +17,15 @@ abstract class Signature extends ApertureConfig
     use preload;
 
     protected Route $task;
+    public ?Cashe $cashe = null;
 
     final function __construct()
     {
         header('Content-Type: application/json');
         ini_set('display_errors', 0);
+
+        if ($this->casheClass)
+            $this->cashe = new $this->casheClass;
 
         $strResult = json_encode($this->runTask());
 
@@ -96,10 +101,14 @@ abstract class Signature extends ApertureConfig
     }
 
 
+    public function useCashe(string $json) {
+        $this->ob->clear();
+        exit($json);
+    }
 
     private function print(string $json)
     {
-        echo $json;
+        echo $this->request->checkCashe($json);
         $this->gen->finish();
     }
 

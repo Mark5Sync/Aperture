@@ -2,6 +2,7 @@
 
 namespace Aperture;
 
+use Aperture\cashe\Cashe;
 use Aperture\proxy\ProxyController;
 
 abstract class Aperture extends Signature
@@ -10,6 +11,7 @@ abstract class Aperture extends Signature
     public string $routes = 'routes';
     public string $namespace = "Api\\";
     public string $prefix = 'Api';
+    public ?string $casheClass = null;
 
 
     public function verificateToken(?string $token): bool | string | array
